@@ -50,26 +50,6 @@ public class FlagWritable implements Writable {
     }
   }
 
-  public FlagWritable(BooleanWritable u, BooleanWritable a, BooleanWritable p,
-      BooleanWritable r, BooleanWritable s, BooleanWritable f) {
-    urg = u;
-    ack = a;
-    psh = p;
-    rst = r;
-    syn = s;
-    fin = f;
-  }
-
-  public void set(boolean u, boolean a, boolean p, boolean r, boolean s,
-      boolean f) {
-    urg.set(u);
-    ack.set(a);
-    psh.set(p);
-    rst.set(r);
-    syn.set(s);
-    fin.set(f);
-  }
-
   @Override
   // Overriding default readFields method.
   // It de-serializes the byte stream data
@@ -91,5 +71,39 @@ public class FlagWritable implements Writable {
     rst.write(out);
     syn.write(out);
     fin.write(out);
+  }
+
+  public boolean hasURG() {
+    return urg.get();
+  }
+
+  public boolean hasACK() {
+    return ack.get();
+  }
+
+  public boolean hasPSH() {
+    return psh.get();
+  }
+
+  public boolean hasRST() {
+    return rst.get();
+  }
+
+  public boolean hasSYN() {
+    return syn.get();
+  }
+
+  public boolean hasFIN() {
+    return fin.get();
+  }
+
+  @Override
+  public String toString() {
+    return (urg.get() ? "U" : ".") +
+        (ack.get() ? "A" : ".") +
+        (psh.get() ? "P" : ".") +
+        (rst.get() ? "R" : ".") +
+        (syn.get() ? "S" : ".") +
+        (fin.get() ? "F" : ".");
   }
 }

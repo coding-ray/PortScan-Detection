@@ -13,7 +13,11 @@ public class NFWritable {
   public static final byte UDP = 17;
 
   // For ICMP, which has no destination port
+  // It is -1 instead of 0 to make hashCode() work
   public static final int NO_PORT = -1;
+
+  // For 0.0.0.0, which means an invalid, unknown or non-applicable target
+  public static final long NO_IP = 0;
 
   // Split patterns for string
   private static final Pattern DOT_PATTERN = Pattern.compile("\\.");
@@ -24,9 +28,15 @@ public class NFWritable {
     value = new NFValue();
   }
 
-  public NFWritable(String data /* one line of NetFlow data from nf file */) {
+  /**
+   * Create an Writable containing NetFlow data.
+   * 
+   * @param data one line of NetFlow data from nf file
+   */
+  public NFWritable(String data) {
     Scanner s = new Scanner(data);
 
+    // Temporary variables
     long time = 0;
     int duration = 0;
     int protocol = 0;

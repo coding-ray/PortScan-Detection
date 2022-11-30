@@ -2,6 +2,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import org.apache.hadoop.io.*;
+import java.sql.Timestamp;
 
 public class NFValue implements Writable {
   private LongWritable time; // the time that the flow starts in milliseconds
@@ -20,7 +21,8 @@ public class NFValue implements Writable {
   private ICMPWritable icmp;
 
   public NFValue() {
-    time = new LongWritable();
+    // time is set to 0 to show that there is no record there.
+    time = new LongWritable(0);
     duration = new IntWritable();
     protocol = new IntWritable();
     packetNumber = new IntWritable();
@@ -46,22 +48,8 @@ public class NFValue implements Writable {
     this.flag = new FlagWritable(flagString);
     if (icmpString.length() > 0)
       this.icmp = new ICMPWritable(icmpString);
-  }
-
-  public void set(LongWritable time, IntWritable duration, IntWritable protocol,
-      IntWritable packetNumber, LongWritable packetSize, IntWritable tos,
-      IntWritable flow, BooleanWritable isReversed, FlagWritable flag,
-      ICMPWritable icmp) {
-    this.time = time;
-    this.duration = duration;
-    this.protocol = protocol;
-    this.packetNumber = packetNumber;
-    this.packetSize = packetSize;
-    this.tos = tos;
-    this.flow = flow;
-    this.isReversed = isReversed;
-    this.flag = flag;
-    this.icmp = icmp;
+    else
+      this.icmp = new ICMPWritable();
   }
 
   @Override
@@ -92,8 +80,58 @@ public class NFValue implements Writable {
     icmp.write(out);
   }
 
+  /**
+   * Add duration, packetNumber and flow together, and
+   * replace flag with latest flag.
+   * 
+   * @param input NFValue to be added
+   */
+  public void combine(NFValue input) {
+    // todo: check if this works
+    duration.set((int) (input.time.get() - time.get())
+        + input.duration.get());
+
+    packetNumber.set(packetNumber.get() + input.packetNumber.get());
+    flow.set(flow.get() + input.flow.get());
+    flag = input.flag;
+  }
+
+  public FlagWritable getFlag() {
+    return flag;
+  }
+
+  public long getTime() {
+    return time.get();
+  }
+
+  public int getDuration() {
+    return duration.get();
+  }
+
+  public int getProtocol() {
+    return protocol.get();
+  }
+
+  public boolean getIsReversed() {
+    return isReversed.get();
+  }
+
+  @Override
   public String toString() {
-    return new String("");
-    // todo
+    if (!this.hasValue())
+      return "none";
+    else
+      return new Timestamp(time.get()) + "\t" +
+          duration.toString() + "\t" +
+          protocol.toString() + "\t" +
+          packetNumber.toString() + "\t" +
+          packetSize.toString() + "\t" +
+          tos.toString() + "\t" +
+          flow.toString() + "\t" +
+          flag.toString();
+  }
+
+  public boolean hasValue() {
+    return time.get() != 0;
   }
 }

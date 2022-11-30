@@ -85,7 +85,7 @@ reset_hdfs:
 	sudo start-all.sh
 	sudo hdfs dfs -mkdir /user /user/root /user/ray
 	sudo hdfs dfs -chown ray /user/ray
-	hdfs dfs -mkdir -p $(HDFS_INPUT_PATH)
+	hdfs dfs -mkdir -p $(HDFS_INPUT_PATH) $(HDFS_WHITELIST_PATH)
 
 
 ## Both: Stop everything of the HDFS
@@ -101,8 +101,7 @@ put_data: data
 
 ## HDFS: Remove input data in the HDFS
 remove_data:
-	hdfs dfs -rm $(HDFS_INPUT_PATH)/*
-	hdfs dfs -rm -r $(HDFS_WHITELIST_PATH)/*
+	hdfs dfs -rm -r -f $(HDFS_INPUT_PATH)* $(HDFS_WHITELIST_PATH)*
 
 
 ## Both: Copy output from HDFS to local
