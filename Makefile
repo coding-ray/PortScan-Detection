@@ -68,7 +68,7 @@ all:
 run_psd: $(OUT_DIR)/$(APP_NAME)
 	@hdfs dfs -rm -r -f $(HDFS_OUTPUT_PATH)
 	@cd $(OUT_DIR); \
-	hadoop jar $(APP_NAME) $(CLASS_CONTAINING_MAIN) $(HDFS_INPUT_PATH) $(HDFS_OUTPUT_PATH)
+	hadoop jar $(APP_NAME) $(CLASS_CONTAINING_MAIN)
 	@make get_data --no-print-directory
 
 
