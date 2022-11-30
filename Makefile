@@ -4,8 +4,8 @@
 
 ## Local
 TEST_DIR = test_local
-#INPUT_DATA_PATH = data/cicids2017_friday.nf
-INPUT_DATA_PATH = data/NetFlow.nf
+INPUT_DATA_PATH = data/cicids2017_friday.nf
+#INPUT_DATA_PATH = data/NetFlow.nf
 WHITELIST_PATH = whitelist/*
 SRC = src/*.java
 OUT_DIR = out
@@ -17,9 +17,10 @@ CLASS_CONTAINING_MAIN = Entry # Class (File) name that contains the main functio
 DFS_DATANODE_DATA_DIR = /home/hadoop # in /usr/etc/hadoop/hdfs-site.xml
 
 ## HDFS
-HDFS_INPUT_PATH = psd/input/1
-HDFS_OUTPUT_PATH = psd/output/1
-HDFS_WHITELIST_PATH = psd/whitelist
+HDFS_INPUT_PATH = psd/0/
+HDFS_INTERMEDIATE_PATH = psd/1/ psd/2/
+HDFS_OUTPUT_PATH = psd/3/
+HDFS_WHITELIST_PATH = psd/whitelist/
 
 #-------------------------------------------------------------------#
 
@@ -40,7 +41,7 @@ cleanup:
 
 ## Local: Make the folder to contain the compiled files
 $(CLASS_FILE_DIR):
-	mkdir -p $(CLASS_FILE_DIR)
+	@mkdir -p $(CLASS_FILE_DIR)
 
 
 ## Local: Test for local java program
@@ -66,7 +67,7 @@ all:
 
 ## HDFS: Run the program
 run_psd: $(OUT_DIR)/$(APP_NAME)
-	@hdfs dfs -rm -r -f $(HDFS_OUTPUT_PATH)
+	@hdfs dfs -rm -r -f $(HDFS_OUTPUT_PATH) $(HDFS_INTERMEDIATE_PATH)
 	@cd $(OUT_DIR); \
 	hadoop jar $(APP_NAME) $(CLASS_CONTAINING_MAIN)
 	@make get_data --no-print-directory
@@ -107,6 +108,11 @@ remove_data:
 ## Both: Copy output from HDFS to local
 get_data:
 	hdfs dfs -copyToLocal -f $(HDFS_OUTPUT_PATH) $(OUT_DIR)
+
+
+## HDFS: Peak the first 10 record of the output
+peak_data:
+	hdfs dfs -head $(HDFS_OUTPUT_PATH)part-r-00000 | head -10
 
 
 ## Local: Print git log

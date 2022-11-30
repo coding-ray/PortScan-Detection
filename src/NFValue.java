@@ -126,9 +126,10 @@ public class NFValue implements Writable {
           protocol.toString() + "\t" +
           packetNumber.toString() + "\t" +
           packetSize.toString() + "\t" +
-          tos.toString() + "\t" +
+          // tos.toString() + "\t" +
           flow.toString() + "\t" +
           flag.toString();
+    // + "\t" + icmp.toString()
   }
 
   public boolean hasValue() {

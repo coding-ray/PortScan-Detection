@@ -61,4 +61,9 @@ public class ICMPWritable implements Writable {
     type.write(out);
     code.write(out);
   }
+
+  @Override
+  public String toString() {
+    return ""; // todo
+  }
 }
