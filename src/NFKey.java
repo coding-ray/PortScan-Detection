@@ -2,6 +2,7 @@ import org.apache.hadoop.io.*;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * NetFlow key used in filter and session extraction stage
@@ -11,6 +12,9 @@ public class NFKey implements WritableComparable<NFKey> {
   private IntWritable srcPort; // 1 ~ 65535 for TCP or UDP. 0 for other protocols.
   private LongWritable dstIP; // 1.2.3.4 = 1<<24 + 2<<16 + 3<<8 + 4
   private IntWritable dstPort; // 1 ~ 65535 for TCP or UDP. 0 for other protocols.
+
+  // Whitelist IP addresses
+  private static List<Long> whitelist = null;
 
   public NFKey() {
     srcIP = new LongWritable();
@@ -93,7 +97,16 @@ public class NFKey implements WritableComparable<NFKey> {
     return (int) hash;
   }
 
-  public boolean isInWhiteList() {
+  public static void initWhitelist()
+      throws IllegalArgumentException, IOException {
+    whitelist = NFWhitelistInitializer.getWhitelist();
+  }
+
+  public boolean isInWhitelist() {
+    for (long ip : whitelist) {
+      if (ip == srcIP.get() || ip == dstIP.get())
+        return true;
+    }
     return false;
   }
 

@@ -6,6 +6,7 @@
 TEST_DIR = test_local
 #INPUT_DATA_PATH = data/cicids2017_friday.nf
 INPUT_DATA_PATH = data/NetFlow.nf
+WHITELIST_PATH = whitelist/*
 SRC = src/*.java
 OUT_DIR = out
 CLASS_FILE_DIR = $(OUT_DIR)/psd
@@ -18,6 +19,7 @@ DFS_DATANODE_DATA_DIR = /home/hadoop # in /usr/etc/hadoop/hdfs-site.xml
 ## HDFS
 HDFS_INPUT_PATH = psd/input/1
 HDFS_OUTPUT_PATH = psd/output/1
+HDFS_WHITELIST_PATH = psd/whitelist
 
 #-------------------------------------------------------------------#
 
@@ -78,7 +80,7 @@ deep_reset_hdfs: stop_hdfs
 
 
 ## HDFS: Format the HDFS
-reset_hdfs: stop_hdfs
+reset_hdfs:
 	sudo hdfs namenode -format
 	sudo start-all.sh
 	sudo hdfs dfs -mkdir /user /user/root /user/ray
@@ -94,11 +96,13 @@ stop_hdfs:
 ## Both: Copy data from local to the HDFS
 put_data: data
 	hdfs dfs -put -f $(INPUT_DATA_PATH) $(HDFS_INPUT_PATH)
+	hdfs dfs -put -f $(WHITELIST_PATH) $(HDFS_WHITELIST_PATH)
 
 
 ## HDFS: Remove input data in the HDFS
 remove_data:
 	hdfs dfs -rm $(HDFS_INPUT_PATH)/*
+	hdfs dfs -rm -r $(HDFS_WHITELIST_PATH)/*
 
 
 ## Both: Copy output from HDFS to local

@@ -15,14 +15,19 @@ public class FilterAndSessionExtraction {
 			extends Mapper<LongWritable, Text, NFKey, IntWritable> {
 
 		private static final IntWritable ONE = new IntWritable(1);
+		@Override
+		public void setup(Context context)
+				throws IllegalArgumentException, IOException {
+			NFKey.initWhitelist();
+		}
 
 		@Override
 		public void map(LongWritable key, Text oneLine, Context context)
 				throws IOException, InterruptedException {
 
 			NFWritable nf = new NFWritable(oneLine.toString());
-			if (!nf.isInWhiteList())
-				context.write(nf.getKey(), ONE);
+			if (!nf.isInWhitelist())
+				context.write(nf.getKey(), nf.getValue());
 		}
 	}
 

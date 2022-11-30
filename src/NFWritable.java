@@ -118,7 +118,7 @@ public class NFWritable {
     return value;
   }
 
-  public boolean isInWhiteList() {
-    return key.isInWhiteList();
+  public boolean isInWhitelist() {
+    return key.isInWhitelist();
   }
 }
