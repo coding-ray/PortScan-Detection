@@ -30,6 +30,13 @@ public class NFKey implements WritableComparable<NFKey> {
     this.dstPort = new IntWritable(dstPort);
   }
 
+  public NFKey(IPPortPair src, IPPortPair dst) {
+    this.srcIP = new LongWritable(src.getIPLong());
+    this.srcPort = new IntWritable(src.getPort());
+    this.dstIP = new LongWritable(dst.getIPLong());
+    this.dstPort = new IntWritable(dst.getPort());
+  }
+
   @Override
   public void readFields(DataInput in) throws IOException {
     srcIP.readFields(in);
@@ -117,3 +124,4 @@ public class NFKey implements WritableComparable<NFKey> {
         (ip & 0x000000FF);
   }
 }
+

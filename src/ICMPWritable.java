@@ -46,8 +46,26 @@ public class ICMPWritable implements Writable {
     // Exapmle: 0.0
 
     String[] typeCode = DOT_PATTERN.split(icmpTypeCodeString);
-    type = new ByteWritable(Byte.parseByte(typeCode[0]));
-    code = new ByteWritable(Byte.parseByte(typeCode[1]));
+    if (typeCode.length == 2) {
+      // Some weird record of IP is as follows: 240.254.209.127:0.203
+      // in which 203 exceeds the limit of a signed Byte.
+      int temp;
+      if ((temp = Integer.parseInt(typeCode[0])) < Byte.MAX_VALUE)
+        type = new ByteWritable((byte) temp);
+      else
+        type = new ByteWritable();
+
+      if ((temp = Integer.parseInt(typeCode[1])) < Byte.MAX_VALUE)
+        code = new ByteWritable((byte) temp);
+      else
+        type = new ByteWritable();
+    } else {
+      // Log abnormal input values
+      System.out.println("Exception: ICMPWritable.<init> icmpTypeCodeString:");
+      System.out.println(icmpTypeCodeString);
+      type = new ByteWritable();
+      code = new ByteWritable();
+    }
   }
 
   @Override
@@ -67,3 +85,4 @@ public class ICMPWritable implements Writable {
     return ""; // todo
   }
 }
+

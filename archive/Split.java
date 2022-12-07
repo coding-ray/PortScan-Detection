@@ -33,7 +33,8 @@ public class Split {
       // -------------------------------------------
       // Actual splitting of file into smaller files
       // -------------------------------------------
-      DataInputStream dis = new DataInputStream(new FileInputStream(input_file_name));
+      DataInputStream dis = new DataInputStream(
+          new FileInputStream(input_file_name));
 
       BufferedReader br = new BufferedReader(new InputStreamReader(dis));
       String one_line;
@@ -62,3 +63,4 @@ public class Split {
   }
 
 }
+

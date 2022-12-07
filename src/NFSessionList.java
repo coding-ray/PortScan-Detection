@@ -57,3 +57,4 @@ public class NFSessionList implements Iterable<NFSession> {
       return list.iterator();
    }
 }
+

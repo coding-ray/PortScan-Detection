@@ -7,6 +7,7 @@ public class NFWritable {
   private NFValue value;
 
   // Protocol numbers
+  // Source: https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xml
   public static final byte ICMP = 1;
   public static final byte IGMP = 2;
   public static final byte TCP = 6;
@@ -60,7 +61,10 @@ public class NFWritable {
     // Set source IP and port
     String[] src = COLON_PATTERN.split(s.next());
     srcIP = convertIPtoNumber(src[0], protocol);
-    srcPort = Integer.parseInt(src[1]);
+    // There are records come with only IP address (5 or 6 bytes),
+    // and they should be ignored.
+    if (src.length >= 2)
+      srcPort = Integer.parseInt(src[1]);
 
     // skip "->"
     s.next();
@@ -68,12 +72,16 @@ public class NFWritable {
     // Set destination IP and port
     String[] dst = COLON_PATTERN.split(s.next());
     dstIP = convertIPtoNumber(dst[0], protocol);
-    if (protocol == TCP || protocol == UDP) {
-      dstPort = Integer.parseInt(dst[1]);
-    } else {
-      dstPort = -1;
-      if (protocol == ICMP) {
-        icmpString = dst[1];
+    if (dst.length >= 2) {
+      // There are records come with only IP address (5 or 6 bytes),
+      // and they should be ignored.
+      if (protocol == TCP || protocol == UDP) {
+        dstPort = Integer.parseInt(dst[1]);
+      } else {
+        dstPort = -1;
+        if (protocol == ICMP) {
+          icmpString = dst[1];
+        }
       }
     }
 
@@ -132,3 +140,4 @@ public class NFWritable {
     return key.isInWhitelist();
   }
 }
+

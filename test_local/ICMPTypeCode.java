@@ -36,3 +36,4 @@ public class ICMPTypeCode {
     code = Byte.parseByte(type_and_code[1]);
   }
 }
+

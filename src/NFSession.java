@@ -7,9 +7,7 @@ public class NFSession implements Writable {
   private NFValue directConnection;
   private NFValue reverseConnection;
 
-  // TCP timeout is set to 1 hour in milliseconds
-  // todo: it should be lower.
-  public static final long TIMEOUT = 3600L * 1000;
+  public static final long TIMEOUT = 60;
 
   public NFSession() {
     directConnection = new NFValue();
@@ -90,3 +88,4 @@ public class NFSession implements Writable {
     return directConnection.toString() + "\t" + reverseConnection.toString();
   }
 }
+

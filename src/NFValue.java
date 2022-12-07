@@ -49,7 +49,7 @@ public class NFValue implements Writable {
     if (icmpString.length() > 0)
       this.icmp = new ICMPWritable(icmpString);
     else
-      this.icmp = new ICMPWritable();
+      this.icmp = new ICMPWritable(); // since the protocol is not ICMP
   }
 
   @Override
@@ -136,3 +136,4 @@ public class NFValue implements Writable {
     return time.get() != 0;
   }
 }
+

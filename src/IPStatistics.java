@@ -37,3 +37,4 @@ public class IPStatistics implements Writable {
     return value;
   }
 }
+

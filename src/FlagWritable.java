@@ -97,6 +97,33 @@ public class FlagWritable implements Writable {
     return fin.get();
   }
 
+  public boolean hasOnlySYN() {
+    return !urg.get() &&
+        !ack.get() &&
+        !psh.get() &&
+        !rst.get() &&
+        syn.get() &&
+        !fin.get();
+  }
+
+  public boolean hasOnlyFIN() {
+    return !urg.get() &&
+        !ack.get() &&
+        !psh.get() &&
+        !rst.get() &&
+        !syn.get() &&
+        fin.get();
+  }
+
+  public void overlapWith(FlagWritable in) {
+    urg.set(urg.get() || in.urg.get());
+    ack.set(ack.get() || in.ack.get());
+    psh.set(psh.get() || in.psh.get());
+    rst.set(rst.get() || in.rst.get());
+    syn.set(syn.get() || in.syn.get());
+    fin.set(fin.get() || in.fin.get());
+  }
+
   @Override
   public String toString() {
     return (urg.get() ? "U" : ".") +
@@ -107,3 +134,4 @@ public class FlagWritable implements Writable {
         (fin.get() ? "F" : ".");
   }
 }
+
