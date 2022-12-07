@@ -1,9 +1,9 @@
 {
   "java.project.referencedLibraries": [
     "lib/**/*.jar",
-    "/usr/share/hadoop/common/hadoop-common-3.3.3.jar",
-    "/usr/share/hadoop/mapreduce/hadoop-mapreduce-client-common-3.3.3.jar",
-    "/usr/share/hadoop/mapreduce/hadoop-mapreduce-client-core-3.3.3.jar"
+    "/usr/share/hadoop/common/hadoop-common-3.3.4.jar",
+    "/usr/share/hadoop/mapreduce/hadoop-mapreduce-client-common-3.3.4.jar",
+    "/usr/share/hadoop/mapreduce/hadoop-mapreduce-client-core-3.3.4.jar"
   ],
   "java.format.settings.url": ".vscode/eclipse-java-google-style-mod.xml"
 }
