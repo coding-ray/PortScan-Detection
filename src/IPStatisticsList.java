@@ -3,7 +3,7 @@ import java.util.Arrays;
 
 public class IPStatisticsList {
 
-  private static final String NONE = "none";
+  public static final String NONE = "none";
   private static final Pattern TAB_PATTERN = Pattern.compile("\t");
 
   /**

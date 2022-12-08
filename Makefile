@@ -22,8 +22,8 @@ DFS_DATANODE_DATA_DIR = /home/hadoop # in /usr/etc/hadoop/hdfs-site.xml
 
 ## HDFS
 HDFS_INPUT_PATH = psd/0/
-HDFS_INTERMEDIATE_PATH = psd/1/ psd/2/# psd/3/ psd/4/
-HDFS_OUTPUT_PATH = psd/3/
+HDFS_INTERMEDIATE_PATH = psd/1/ psd/3/ psd/4/
+HDFS_OUTPUT_PATH = psd/5
 HDFS_WHITELIST_PATH = psd/whitelist/
 
 #-------------------------------------------------------------------#
@@ -35,7 +35,7 @@ $(APP_NAME): $(CLASS_FILE_DIR) $(SRC)
 	@javac -classpath `hadoop classpath` -d $(CLASS_FILE_DIR) $(SRC)
   # equivalent to "hadoop com.sun.tools.javac.Main $(SRC)"
 	@cd $(CLASS_FILE_DIR); \
-	jar -cf ../$(APP_NAME) .
+	jar -cf0 ../$(APP_NAME) .
 
 
 ## Local: Clear all compiled files and the profram
@@ -109,7 +109,7 @@ check_du:
 
 ## HDFS: Run the program
 run_psd: $(OUT_DIR)/$(APP_NAME)
-	@hdfs dfs -rm -r -f $(HDFS_OUTPUT_PATH) $(HDFS_INTERMEDIATE_PATH)
+	@hdfs dfs -rm -r -f $(HDFS_INTERMEDIATE_PATH) $(HDFS_OUTPUT_PATH)
 	@cd $(OUT_DIR); \
 	hadoop jar $(APP_NAME) $(CLASS_CONTAINING_MAIN)
 	@make get_data --no-print-directory
@@ -122,6 +122,12 @@ run_psd_split: split remove_data put_data
 ## Both: Erase everythong of the HDFS even the formated file system \
         and initialize the HDFS
 deep_reset_hdfs: stop_hdfs
+	sudo rm -rf /home/hadoop
+	make reset_hdfs --no-print-directory
+
+
+## Both: as deep_reset_hdfs, but without stop_hdfs
+init_hdfs:
 	sudo rm -rf /home/hadoop
 	make reset_hdfs --no-print-directory
 

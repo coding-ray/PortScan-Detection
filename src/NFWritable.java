@@ -3,7 +3,7 @@ import java.util.regex.Pattern;
 import java.sql.Timestamp;
 
 public class NFWritable {
-  private NFKey key;
+  private TwoWayConnection key;
   private NFValue value;
 
   // Protocol numbers
@@ -25,7 +25,7 @@ public class NFWritable {
   private static final Pattern COLON_PATTERN = Pattern.compile(":");
 
   public NFWritable() {
-    key = new NFKey();
+    key = new TwoWayConnection();
     value = new NFValue();
   }
 
@@ -109,7 +109,7 @@ public class NFWritable {
     flow = Integer.parseInt(s.next());
 
     // End of setup
-    key = new NFKey(srcIP, srcPort, dstIP, dstPort);
+    key = new TwoWayConnection(srcIP, srcPort, dstIP, dstPort);
     value = new NFValue(time, duration, protocol, packetNumber, packetSize,
         tos, flow, isReversed, flagString, icmpString);
 
@@ -128,7 +128,7 @@ public class NFWritable {
         (Long.parseLong(digits[3]));
   }
 
-  public NFKey getKey() {
+  public TwoWayConnection getKey() {
     return key;
   }
 

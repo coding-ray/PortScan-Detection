@@ -4,6 +4,8 @@ import java.io.IOException;
 import org.apache.hadoop.io.*;
 
 public class FlagWritable implements Writable {
+  public static final String NO_FLAG = "......";
+
   private BooleanWritable urg;
   private BooleanWritable ack;
   private BooleanWritable psh;
@@ -24,7 +26,8 @@ public class FlagWritable implements Writable {
   // Custom constructor for flags in the format of
   // 0x?? or UAPRSF.
   public FlagWritable(String flagString) {
-    if (flagString.charAt(0) == '0') {
+    char firstChar = flagString.charAt(0);
+    if (firstChar == '0') {
       /*
        * The input is of format CEUAPRSF in hexidecimal.
        * E.g., 0x5b.
@@ -38,7 +41,7 @@ public class FlagWritable implements Writable {
       rst = new BooleanWritable((f & 4) != 0);
       syn = new BooleanWritable((f & 2) != 0);
       fin = new BooleanWritable((f & 1) != 0);
-    } else {
+    } else if (firstChar == '.' || firstChar == 'U') {
       // The input is of format UAPRSF.
       char[] flagArray = flagString.toCharArray();
       urg = new BooleanWritable(flagArray[0] != '.');
@@ -47,6 +50,14 @@ public class FlagWritable implements Writable {
       rst = new BooleanWritable(flagArray[3] != '.');
       syn = new BooleanWritable(flagArray[4] != '.');
       fin = new BooleanWritable(flagArray[5] != '.');
+    } else {
+      // The input is not a flag string
+      urg = new BooleanWritable(false);
+      ack = new BooleanWritable(false);
+      psh = new BooleanWritable(false);
+      rst = new BooleanWritable(false);
+      syn = new BooleanWritable(false);
+      fin = new BooleanWritable(false);
     }
   }
 

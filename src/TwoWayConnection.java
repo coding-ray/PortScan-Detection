@@ -7,30 +7,30 @@ import java.util.List;
 /**
  * NetFlow key used in filter and session extraction stage
  */
-public class NFKey implements WritableComparable<NFKey> {
-  private LongWritable srcIP; // 1.2.3.4 = 1<<24 + 2<<16 + 3<<8 + 4
-  private IntWritable srcPort; // 1 ~ 65535 for TCP or UDP. 0 for other protocols.
-  private LongWritable dstIP; // 1.2.3.4 = 1<<24 + 2<<16 + 3<<8 + 4
-  private IntWritable dstPort; // 1 ~ 65535 for TCP or UDP. 0 for other protocols.
+public class TwoWayConnection implements WritableComparable<TwoWayConnection> {
+  protected LongWritable srcIP; // 1.2.3.4 = 1<<24 + 2<<16 + 3<<8 + 4
+  protected IntWritable srcPort; // 1 ~ 65535 for TCP or UDP. 0 for other protocols.
+  protected LongWritable dstIP; // 1.2.3.4 = 1<<24 + 2<<16 + 3<<8 + 4
+  protected IntWritable dstPort; // 1 ~ 65535 for TCP or UDP. 0 for other protocols.
 
   // Whitelist IP addresses
   private static List<Long> whitelist = null;
 
-  public NFKey() {
+  public TwoWayConnection() {
     srcIP = new LongWritable();
     srcPort = new IntWritable();
     dstIP = new LongWritable();
     dstPort = new IntWritable();
   }
 
-  public NFKey(long srcIP, int srcPort, long dstIP, int dstPort) {
+  public TwoWayConnection(long srcIP, int srcPort, long dstIP, int dstPort) {
     this.srcIP = new LongWritable(srcIP);
     this.srcPort = new IntWritable(srcPort);
     this.dstIP = new LongWritable(dstIP);
     this.dstPort = new IntWritable(dstPort);
   }
 
-  public NFKey(IPPortPair src, IPPortPair dst) {
+  public TwoWayConnection(IPPortPair src, IPPortPair dst) {
     this.srcIP = new LongWritable(src.getIPLong());
     this.srcPort = new IntWritable(src.getPort());
     this.dstIP = new LongWritable(dst.getIPLong());
@@ -54,7 +54,7 @@ public class NFKey implements WritableComparable<NFKey> {
   }
 
   @Override
-  public int compareTo(NFKey other) {
+  public int compareTo(TwoWayConnection other) {
     if (srcIP.compareTo(other.srcIP) != 0)
       return srcIP.compareTo(other.srcIP);
 
@@ -69,10 +69,10 @@ public class NFKey implements WritableComparable<NFKey> {
 
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof NFKey))
+    if (!(other instanceof TwoWayConnection))
       return false;
 
-    NFKey o = (NFKey) other;
+    TwoWayConnection o = (TwoWayConnection) other;
     return srcIP.equals(o.srcIP) &&
         srcPort.equals(o.srcPort) &&
         dstIP.equals(o.dstIP) &&

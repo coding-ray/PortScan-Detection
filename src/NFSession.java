@@ -47,15 +47,26 @@ public class NFSession implements Writable {
     // todo: test all the conditions in this function
     if ((input.getProtocol() != NFWritable.TCP) &&
         (input.getProtocol() != NFWritable.ICMP))
-      return false;
+      return false; // E.g., UDP, for it has no concept of session
 
-    NFValue currentDirection = input.getIsReversed() ? reverseConnection
-        : directConnection;
+    NFValue currentDirection;
+    NFValue otherDirection;
+    if (input.getIsReversed()) {
+      currentDirection = reverseConnection;
+      otherDirection = directConnection;
+    } else {
+      currentDirection = directConnection;
+      otherDirection = reverseConnection;
+    }
 
     if (!currentDirection.hasValue())
       return true;
 
-    if (currentDirection.getFlag().hasFIN())
+    if (currentDirection.getProtocol() != input.getProtocol())
+      return false;
+
+    if (currentDirection.getFlag().hasFIN() ||
+        otherDirection.getFlag().hasRST())
       return false;
 
     if (input.getProtocol() == NFWritable.TCP) {

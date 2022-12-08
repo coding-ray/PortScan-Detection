@@ -36,5 +36,9 @@ public class IPStatistics implements Writable {
   public NFFeature getValue() {
     return value;
   }
+
+  public boolean hasValue() {
+    return key.hasValue();
+  }
 }
 

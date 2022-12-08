@@ -55,7 +55,7 @@ public class MaliciousFlowFilter {
       int flow = Integer.parseInt(elements[3]);
       context.write(
           new FlowCount(flow),
-          new PortScanVertical(src, dst).toText());
+          new PortScanVerticalConnection(src, dst).toText());
     }
   }
 

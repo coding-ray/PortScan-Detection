@@ -31,8 +31,15 @@ public class IPPortPair implements WritableComparable<IPPortPair> {
       port = new IntWritable(0);
   }
 
+  public IPPortPair(String ip, String port) {
+    this.ip = new LongWritable(
+        NFWritable.convertIPtoNumber(ip, NFWritable.TCP));
+
+    this.port = new IntWritable(Integer.parseInt(port));
+  }
+
   public String getIP() {
-    return NFKey.convertIPToString(ip.get());
+    return TwoWayConnection.convertIPToString(ip.get());
   }
 
   public long getIPLong() {
@@ -49,6 +56,10 @@ public class IPPortPair implements WritableComparable<IPPortPair> {
 
   public IntWritable getPortWritable() {
     return port;
+  }
+
+  public boolean hasValue() {
+    return ip.get() != 0;
   }
 
   @Override
@@ -96,7 +107,7 @@ public class IPPortPair implements WritableComparable<IPPortPair> {
 
   @Override
   public String toString() {
-    return NFKey.convertIPToString(ip.get()) + ":" + port.toString();
+    return TwoWayConnection.convertIPToString(ip.get()) + ":" + port.toString();
   }
 }
 

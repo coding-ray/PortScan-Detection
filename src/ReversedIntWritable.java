@@ -4,14 +4,15 @@ import java.io.DataOutput;
 import java.io.IOException;
 import org.apache.hadoop.io.IntWritable;
 
-public class FlowCount implements WritableComparable<FlowCount> {
+public class ReversedIntWritable
+    implements WritableComparable<ReversedIntWritable> {
   private IntWritable value;
 
-  public FlowCount() {
+  public ReversedIntWritable() {
     value = new IntWritable();
   }
 
-  public FlowCount(int v) {
+  public ReversedIntWritable(int v) {
     value = new IntWritable(v);
   }
 
@@ -30,16 +31,16 @@ public class FlowCount implements WritableComparable<FlowCount> {
   }
 
   @Override
-  public int compareTo(FlowCount other) {
+  public int compareTo(ReversedIntWritable other) {
     return other.value.compareTo(value);
   }
 
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof FlowCount))
+    if (!(other instanceof ReversedIntWritable))
       return false;
 
-    FlowCount o = (FlowCount) other;
+    ReversedIntWritable o = (ReversedIntWritable) other;
     return value.equals(o.value);
   }
 

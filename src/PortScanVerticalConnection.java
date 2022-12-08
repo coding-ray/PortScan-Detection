@@ -6,18 +6,27 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparable;
 
-public class PortScanVertical implements WritableComparable<PortScanVertical> {
+public class PortScanVerticalConnection
+    implements WritableComparable<PortScanVerticalConnection> {
   private LongWritable srcIP; // 1.2.3.4 = 1<<24 + 2<<16 + 3<<8 + 4
   private IntWritable srcPort; // 1 ~ 65535 for TCP or UDP. 0 for other protocols.
   private LongWritable dstIP; // 1.2.3.4 = 1<<24 + 2<<16 + 3<<8 + 4
 
-  public PortScanVertical() {
+  public PortScanVerticalConnection() {
     srcIP = new LongWritable(0);
     srcPort = new IntWritable(0);
     dstIP = new LongWritable(0);
   }
 
-  public PortScanVertical(IPPortPair src, IPPortPair dst) {
+  public PortScanVerticalConnection(IPPortPair src, IPPortPair dst) {
+    srcIP = src.getIPWritable();
+    srcPort = src.getPortWritable();
+    dstIP = dst.getIPWritable();
+  }
+
+  public PortScanVerticalConnection(String srcString, String dstString) {
+    IPPortPair src = new IPPortPair(srcString);
+    IPPortPair dst = new IPPortPair(dstString);
     srcIP = src.getIPWritable();
     srcPort = src.getPortWritable();
     dstIP = dst.getIPWritable();
@@ -42,7 +51,7 @@ public class PortScanVertical implements WritableComparable<PortScanVertical> {
   }
 
   @Override
-  public int compareTo(PortScanVertical other) {
+  public int compareTo(PortScanVerticalConnection other) {
     if (srcIP.compareTo(other.srcIP) != 0)
       return srcIP.compareTo(other.srcIP);
 
@@ -54,10 +63,10 @@ public class PortScanVertical implements WritableComparable<PortScanVertical> {
 
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof PortScanVertical))
+    if (!(other instanceof PortScanVerticalConnection))
       return false;
 
-    PortScanVertical o = (PortScanVertical) other;
+    PortScanVerticalConnection o = (PortScanVerticalConnection) other;
     return srcIP.equals(o.srcIP) &&
         srcPort.equals(o.srcPort) &&
         dstIP.equals(o.dstIP);
@@ -74,9 +83,10 @@ public class PortScanVertical implements WritableComparable<PortScanVertical> {
 
   @Override
   public String toString() {
-    return NFKey.convertIPToString(srcIP.get()) + ":" + srcPort.toString() +
+    return TwoWayConnection.convertIPToString(srcIP.get()) + ":"
+        + srcPort.toString() +
         "\t->\t" +
-        NFKey.convertIPToString(dstIP.get());
+        TwoWayConnection.convertIPToString(dstIP.get()); // todo: add "V" which denotes vertical
   }
 
   public Text toText() {
