@@ -1,7 +1,10 @@
+package psd.com;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import org.apache.hadoop.io.*;
+import org.apache.hadoop.io.BooleanWritable;
+import org.apache.hadoop.io.Writable;
 
 public class FlagWritable implements Writable {
   public static final String NO_FLAG = "......";

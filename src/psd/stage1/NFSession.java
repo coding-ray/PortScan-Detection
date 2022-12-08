@@ -1,7 +1,12 @@
+package psd.stage1;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import org.apache.hadoop.io.Writable;
+
+import psd.com.NFValue;
+import psd.com.NFWritable;
 
 public class NFSession implements Writable {
   private NFValue directConnection;

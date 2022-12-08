@@ -1,6 +1,10 @@
+package psd.stage1;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import psd.com.NFValue;
 
 public class NFSessionList implements Iterable<NFSession> {
    private List<NFSession> list;

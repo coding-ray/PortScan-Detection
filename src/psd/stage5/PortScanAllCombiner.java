@@ -1,10 +1,9 @@
+package psd.stage5;
+
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Pattern;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -12,6 +11,10 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+import psd.com.IOPath;
+import psd.stage3.IPStatisticsList;
+import psd.stage4.vertical.PortScanVerticalConnection;
 
 public class PortScanAllCombiner {
 

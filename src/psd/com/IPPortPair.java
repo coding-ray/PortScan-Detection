@@ -1,9 +1,11 @@
-import org.apache.hadoop.io.WritableComparable;
-import org.apache.hadoop.io.LongWritable;
+package psd.com;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.regex.Pattern;
+import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.IntWritable;
 
 public class IPPortPair implements WritableComparable<IPPortPair> {

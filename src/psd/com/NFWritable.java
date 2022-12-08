@@ -1,6 +1,8 @@
-import java.util.Scanner;
-import java.util.regex.Pattern;
+package psd.com;
+
 import java.sql.Timestamp;
+import java.util.regex.Pattern;
+import java.util.Scanner;
 
 public class NFWritable {
   private TwoWayConnection key;

@@ -1,3 +1,8 @@
+package psd.stage3;
+
+import psd.com.IPPortPair;
+import psd.com.TwoWayConnection;
+
 /**
  * NetFlow key used in port-scan analysis stages
  */

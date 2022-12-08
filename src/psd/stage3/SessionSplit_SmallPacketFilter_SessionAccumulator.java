@@ -1,9 +1,9 @@
+package psd.stage3;
+
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -11,6 +11,9 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+import psd.com.IOPath;
+import psd.com.IPPortPair;
 
 public class SessionSplit_SmallPacketFilter_SessionAccumulator {
   private static class SessionSplit_SmallPacketFilter extends

@@ -1,8 +1,12 @@
-import org.apache.hadoop.io.*;
+package psd.com;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.List;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.WritableComparable;
 
 /**
  * NetFlow key used in filter and session extraction stage

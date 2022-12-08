@@ -1,9 +1,13 @@
+package psd.stage3;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.sql.Timestamp;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
+
+import psd.com.NFWritable;
 
 /**
  * <pre>
@@ -64,7 +68,7 @@ public class SessionAccumulation extends NFFeature {
   }
 
   public boolean canAdd(NFFeature in) {
-    return this.isEmpty() || (protocol == in.protocol);
+    return this.isEmpty() || (protocol.get() == in.getProtocol());
   }
 
   public boolean isEmpty() {

@@ -7,7 +7,7 @@ TEST_DIR = test_local
 #INPUT_DATA_PATH = data/cicids2017_friday.nf
 INPUT_DATA_PATH = data/NetFlow.nf
 WHITELIST_PATH = whitelist/*
-SRC = src/*.java
+SRC = src/psd
 OUT_DIR = out
 CLASS_FILE_DIR = $(OUT_DIR)/psd
 
@@ -31,11 +31,16 @@ HDFS_WHITELIST_PATH = psd/whitelist/
 # Useful Command Sets
 
 ## Local: Compile the final program into a jar
-$(APP_NAME): $(CLASS_FILE_DIR) $(SRC)
-	@javac -classpath `hadoop classpath` -d $(CLASS_FILE_DIR) $(SRC)
-  # equivalent to "hadoop com.sun.tools.javac.Main $(SRC)"
-	@cd $(CLASS_FILE_DIR); \
-	jar -cf0 ../$(APP_NAME) .
+$(APP_NAME): $(CLASS_FILE_DIR) $(SRC)/Entry.java
+	@javac -classpath `hadoop classpath`:$(OUT_DIR) -d $(OUT_DIR) \
+	$(SRC)/com/*.java \
+	$(SRC)/stage1/*.java \
+	$(SRC)/stage3/*.java \
+	$(SRC)/stage4/vertical/*.java \
+	$(SRC)/stage5/*.java \
+	$(SRC)/Entry.java
+	@cd $(OUT_DIR); \
+	jar -cf0 $(APP_NAME) .
 
 
 ## Local: Clear all compiled files and the profram
@@ -111,7 +116,7 @@ check_du:
 run_psd: $(OUT_DIR)/$(APP_NAME)
 	@hdfs dfs -rm -r -f $(HDFS_INTERMEDIATE_PATH) $(HDFS_OUTPUT_PATH)
 	@cd $(OUT_DIR); \
-	hadoop jar $(APP_NAME) $(CLASS_CONTAINING_MAIN)
+	hadoop jar $(APP_NAME) psd/$(CLASS_CONTAINING_MAIN)
 	@make get_data --no-print-directory
 
 

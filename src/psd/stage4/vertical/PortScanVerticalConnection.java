@@ -1,3 +1,5 @@
+package psd.stage4.vertical;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -5,6 +7,9 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparable;
+
+import psd.com.IPPortPair;
+import psd.com.TwoWayConnection;
 
 public class PortScanVerticalConnection
     implements WritableComparable<PortScanVerticalConnection> {

@@ -1,8 +1,10 @@
-import org.apache.hadoop.io.WritableComparable;
+package psd.stage5;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.WritableComparable;
 
 public class ReversedIntWritable
     implements WritableComparable<ReversedIntWritable> {

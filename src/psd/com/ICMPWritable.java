@@ -1,8 +1,11 @@
-import java.util.regex.Pattern;
-import org.apache.hadoop.io.*;
+package psd.com;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.regex.Pattern;
+import org.apache.hadoop.io.ByteWritable;
+import org.apache.hadoop.io.Writable;
 
 public class ICMPWritable implements Writable {
   /*

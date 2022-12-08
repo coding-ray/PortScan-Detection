@@ -1,8 +1,13 @@
+package psd.com;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import org.apache.hadoop.io.*;
 import java.sql.Timestamp;
+import org.apache.hadoop.io.BooleanWritable;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Writable;
 
 public class NFValue implements Writable {
   private LongWritable time; // the time that the flow starts in milliseconds

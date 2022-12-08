@@ -1,3 +1,5 @@
+package psd.com;
+
 public class IOPath {
   public static final String WHITELIST = "psd/whitelist";
 

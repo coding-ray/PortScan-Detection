@@ -1,11 +1,15 @@
+package psd.stage3;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Writable;
+
+import psd.com.FlagWritable;
+import psd.com.NFWritable;
 
 public class NFFeature implements Writable {
   // Basic features
@@ -143,6 +147,10 @@ public class NFFeature implements Writable {
 
   public int getFlow() {
     return flow.get();
+  }
+
+  public int getProtocol() {
+    return protocol.get();
   }
 
   @Override
