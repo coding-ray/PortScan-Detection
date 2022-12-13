@@ -71,6 +71,7 @@ public class NFSession implements Writable {
       return false;
 
     if (currentDirection.getFlag().hasFIN() ||
+        currentDirection.getFlag().hasRST() ||
         otherDirection.getFlag().hasRST())
       return false;
 
