@@ -71,6 +71,11 @@ public class ICMPWritable implements Writable {
     }
   }
 
+  public ICMPWritable(ICMPWritable input) {
+    type = new ByteWritable(input.type.get());
+    code = new ByteWritable(input.code.get());
+  }
+
   @Override
   public void readFields(DataInput in) throws IOException {
     type.readFields(in);

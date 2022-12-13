@@ -21,10 +21,10 @@ public class NFSession implements Writable {
 
   public NFSession(NFValue input) {
     if (input.getIsReversed()) {
-      reverseConnection = input;
+      reverseConnection = new NFValue(input);
       directConnection = new NFValue();
     } else {
-      directConnection = input;
+      directConnection = new NFValue(input);
       reverseConnection = new NFValue();
     }
   }
@@ -38,13 +38,13 @@ public class NFSession implements Writable {
       if (reverseConnection.hasValue())
         reverseConnection.combine(input);
       else
-        reverseConnection = input;
+        reverseConnection = new NFValue(input);
     } else {
       // Deal with directConnection
       if (directConnection.hasValue())
         directConnection.combine(input);
       else
-        directConnection = input;
+        directConnection = new NFValue(input);
     }
   }
 

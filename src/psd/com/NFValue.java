@@ -57,6 +57,19 @@ public class NFValue implements Writable {
       this.icmp = new ICMPWritable(); // since the protocol is not ICMP
   }
 
+  public NFValue(NFValue input) {
+    this.time = new LongWritable(input.time.get());
+    this.duration = new IntWritable(input.duration.get());
+    this.protocol = new IntWritable(input.protocol.get());
+    this.packetNumber = new IntWritable(input.packetNumber.get());
+    this.packetSize = new LongWritable(input.packetSize.get());
+    this.tos = new IntWritable(input.tos.get());
+    this.flow = new IntWritable(input.flow.get());
+    this.isReversed = new BooleanWritable(input.isReversed.get());
+    this.flag = new FlagWritable(input.flag);
+    this.icmp = new ICMPWritable(input.icmp);
+  }
+
   @Override
   public void readFields(DataInput in) throws IOException {
     time.readFields(in);

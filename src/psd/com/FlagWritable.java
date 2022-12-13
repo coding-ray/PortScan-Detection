@@ -64,6 +64,15 @@ public class FlagWritable implements Writable {
     }
   }
 
+  public FlagWritable(FlagWritable input) {
+    urg = new BooleanWritable(input.urg.get());
+    ack = new BooleanWritable(input.ack.get());
+    psh = new BooleanWritable(input.psh.get());
+    rst = new BooleanWritable(input.rst.get());
+    syn = new BooleanWritable(input.syn.get());
+    fin = new BooleanWritable(input.fin.get());
+  }
+
   @Override
   // Overriding default readFields method.
   // It de-serializes the byte stream data
