@@ -98,7 +98,7 @@ public class NFValue implements Writable {
 
     packetNumber.set(packetNumber.get() + input.packetNumber.get());
     flow.set(flow.get() + input.flow.get());
-    flag = input.flag;
+    flag.overlapWith(input.flag);
   }
 
   public FlagWritable getFlag() {
