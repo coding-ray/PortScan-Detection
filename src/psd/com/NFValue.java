@@ -105,11 +105,11 @@ public class NFValue implements Writable {
    * @param input NFValue to be added
    */
   public void combine(NFValue input) {
-    // todo: check if this works
     duration.set((int) (input.time.get() - time.get())
         + input.duration.get());
 
     packetNumber.set(packetNumber.get() + input.packetNumber.get());
+    packetSize.set(packetSize.get() + input.packetSize.get());
     flow.set(flow.get() + input.flow.get());
     flag.overlapWith(input.flag);
   }
