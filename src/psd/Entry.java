@@ -9,19 +9,20 @@ import psd.stage5.PortScanAllCombiner;
 public class Entry {
   public static int main(String[] args)
       throws IOException, ClassNotFoundException, InterruptedException {
-    if (WhitelistFilterAndSessionExtraction.run() == 1)
-      return 1;
+    int code = 0;
+    if ((code = WhitelistFilterAndSessionExtraction.run()) != 0)
+      return code;
 
     // 2 is skipped.
 
-    if (SessionSplit_SmallPacketFilter_SessionAccumulator.run() == 3)
-      return 3;
+    if ((code = SessionSplit_SmallPacketFilter_SessionAccumulator.run()) != 0)
+      return code;
 
-    if (PortScanVerticalFilter.run() == 41)
-      return 41;
+    if ((code = PortScanVerticalFilter.run()) != 0)
+      return code;
 
-    if (PortScanAllCombiner.run() == 5)
-      return 5;
+    if ((code = PortScanAllCombiner.run()) != 0)
+      return code;
 
     return 0;
   }
