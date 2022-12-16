@@ -43,10 +43,9 @@ public class PortScanAllCombiner {
        */
 
       String[] elements = TAB_PATTERN.split(oneLine.toString());
-      if (!elements[3].equals(IPStatisticsList.NONE))
-        context.write(
-            new ReversedIntWritable(Integer.parseInt(elements[9])),
-            new PortScanVerticalConnection(elements[0], elements[2]));
+      context.write(
+          new ReversedIntWritable(Integer.parseInt(elements[9])),
+          new PortScanVerticalConnection(elements[0], elements[2]));
     }
   } // End of mapper
 
