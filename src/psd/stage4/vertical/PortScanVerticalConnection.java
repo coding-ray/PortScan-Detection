@@ -17,6 +17,8 @@ public class PortScanVerticalConnection
   private IntWritable srcPort; // 1 ~ 65535 for TCP or UDP. 0 for other protocols.
   private LongWritable dstIP; // 1.2.3.4 = 1<<24 + 2<<16 + 3<<8 + 4
 
+  public static final String VERTICAL_LABEL = "V";
+
   public PortScanVerticalConnection() {
     srcIP = new LongWritable(0);
     srcPort = new IntWritable(0);
@@ -88,10 +90,11 @@ public class PortScanVerticalConnection
 
   @Override
   public String toString() {
-    return TwoWayConnection.convertIPToString(srcIP.get()) + ":"
+    return VERTICAL_LABEL + "\t" +
+        TwoWayConnection.convertIPToString(srcIP.get()) + ":"
         + srcPort.toString() +
         "\t->\t" +
-        TwoWayConnection.convertIPToString(dstIP.get()); // todo: add "V" which denotes vertical
+        TwoWayConnection.convertIPToString(dstIP.get());
   }
 
   public Text toText() {

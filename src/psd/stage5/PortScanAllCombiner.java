@@ -27,25 +27,26 @@ public class PortScanAllCombiner {
     public void map(LongWritable key, Text oneLine, Context context)
         throws IOException, InterruptedException {
       /* Sample input (oneLine) and the index of elemets after split
-       * 0                  1   2               3                       5 6 7   8     9 10
-       * 192.168.10.9:1033	->	192.168.10.3:88	2021-04-11 09:40:58.072	2	6	20	6992	2	2
+       * 0	1									2		3								4												5	6	7		8			9	10
+       * V	192.168.10.9:1033	->	192.168.10.3:88	2021-04-11 09:40:58.072	2	6	20	6992	2	2
        * 
-       * 0: source IP and port
-       * 1: ->, which indicates the flow is from 0 to 2
-       * 2: destination IP and port
-       * 3: the time that the source started to connect to the destination
-       * 4: the duration in milliseconds that the source has connection to the destination
-       * 5: protocol number
-       * 6: packet number in total
-       * 7: packet size in total
-       * 8: number of flow
-       * 9: number of session (or the number of flow for the connection whose protocol is not TCP)
+       * 0 : V|H|B, which denodes this record is a vertical, horizontal or block scan accumulation
+       * 1 : source IP and port
+       * 2 : ->, which indicates the flow is from 0 to 2
+       * 3 : destination IP and port
+       * 4 : the time that the source started to connect to the destination
+       * 5 : the duration in milliseconds that the source has connection to the destination
+       * 6 : protocol number
+       * 7 : packet number in total
+       * 8 : packet size in total
+       * 9 : number of flow
+       * 10: number of session (or the number of flow for the connection whose protocol is not TCP)
        */
 
       String[] elements = TAB_PATTERN.split(oneLine.toString());
       context.write(
-          new ReversedIntWritable(Integer.parseInt(elements[9])),
-          new PortScanVerticalConnection(elements[0], elements[2]));
+          new ReversedIntWritable(Integer.parseInt(elements[10])),
+          new PortScanVerticalConnection(elements[1], elements[3]));
     }
   } // End of mapper
 
