@@ -29,6 +29,7 @@ import psd.com.NFWritable;
  */
 public class SessionAccumulation extends NFFeature {
   // For normal connections
+  // todo: make them higher and tunable
   private static final int TCP_SESSION_MAX = 2;
   private static final int UDP_FLOW_MAX = 2;
   private static final int OTHER_FLOW_MAX = 2;
