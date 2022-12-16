@@ -49,7 +49,6 @@ public class NFSession implements Writable {
   }
 
   public boolean canAdd(NFValue input) {
-    // todo: test all the conditions in this function
     if ((input.getProtocol() != NFWritable.TCP) &&
         (input.getProtocol() != NFWritable.ICMP))
       return false; // E.g., UDP, for it has no concept of session
