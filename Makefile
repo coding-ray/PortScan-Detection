@@ -4,26 +4,31 @@
 
 ## Local
 TEST_DIR = test_local
-#INPUT_DATA_PATH = data/cicids2017_friday.nf
-INPUT_DATA_PATH = data/NetFlow.nf
+INPUT_DATA_PATH = data/cicids2017_friday.nf
+#INPUT_DATA_PATH = data/NetFlow.nf
 WHITELIST_PATH = whitelist/*
 SRC = src/psd
 OUT_DIR = out
 CLASS_FILE_DIR = $(OUT_DIR)/psd
 
+SPLIT_DATA_PATH = /mnt/WinData/Download/PJ_Data/netflow.nf
+#SPLIT_DATA_PATH = $(INPUT_DATA_PATH)
 LINES_IN_ONE_SPLIT = 10000000 # Default: 10M (10000000)
-INDEX_OF_SPLIT = 18
+INDEX_OF_SPLIT = 0
 #INPUT_DATA_PATH = data/split/$(INDEX_OF_SPLIT).nf
+RUN_PSD_SPLIT_START = 0
+RUN_PSD_SPLIT_END = 100
 
 ## Hadoop
 APP_NAME = psd.jar # Port-Scan Detection
 CLASS_CONTAINING_MAIN = Entry # Class (File) name that contains the main function
-DFS_DATANODE_DATA_DIR = /home/hadoop # in /usr/etc/hadoop/hdfs-site.xml
+#DFS_DATANODE_DATA_DIR = /home/hadoop # in /usr/etc/hadoop/hdfs-site.xml
+DFS_DATANODE_DATA_DIR = /HDFS # in /usr/etc/hadoop/hdfs-site.xml
 
 ## HDFS
 HDFS_INPUT_PATH = psd/0/
-HDFS_INTERMEDIATE_PATH = psd/1/ psd/3/ psd/4/
-HDFS_OUTPUT_PATH = psd/5
+HDFS_INTERMEDIATE_PATH = psd/1/ psd/3/ psd/4/ psd/5
+HDFS_OUTPUT_PATH = psd/6
 HDFS_WHITELIST_PATH = psd/whitelist/
 
 #-------------------------------------------------------------------#
@@ -36,8 +41,10 @@ $(APP_NAME): $(CLASS_FILE_DIR) $(SRC)/Entry.java
 	$(SRC)/com/*.java \
 	$(SRC)/stage1/*.java \
 	$(SRC)/stage3/*.java \
+	$(SRC)/stage4/block/*.java \
 	$(SRC)/stage4/vertical/*.java \
 	$(SRC)/stage5/*.java \
+	$(SRC)/stage6/*.java \
 	$(SRC)/Entry.java
 	@cd $(OUT_DIR); \
 	jar -cf0 $(APP_NAME) .
@@ -62,16 +69,9 @@ test: $(TEST_DIR)/PlayGround.java
 
 ## Local: Get one split of an input data
 split: archive/GetOneSplitOfFile.java data/split
-	@javac archive/GetOneSplitOfFile.java
-	@java archive/GetOneSplitOfFile $(LINES_IN_ONE_SPLIT) $(INDEX_OF_SPLIT)
-	@rm archive/GetOneSplitOfFile.class
-
-
-## Local: Get one split of an input data
-split_all: archive/GetAllSplitOfFile.java data/split
-	javac archive/GetAllSplitOfFile.java
-	java archive/GetAllSplitOfFile $(LINES_IN_ONE_SPLIT)
-	rm archive/GetAllSplitOfFile.class
+	javac archive/GetOneSplitOfFile.java
+	java archive/GetOneSplitOfFile $(LINES_IN_ONE_SPLIT) $(INDEX_OF_SPLIT)
+	rm archive/GetOneSplitOfFile.class
 
 
 ## Local: Create folder to contain split input files
@@ -127,13 +127,13 @@ run_psd_split: split remove_data put_data
 ## Both: Erase everythong of the HDFS even the formated file system \
         and initialize the HDFS
 deep_reset_hdfs: stop_hdfs
-	sudo rm -rf /home/hadoop
+	sudo rm -rf $(DFS_DATANODE_DATA_DIR)
 	make reset_hdfs --no-print-directory
 
 
 ## Both: as deep_reset_hdfs, but without stop_hdfs
 init_hdfs:
-	sudo rm -rf /home/hadoop
+	sudo rm -rf $(DFS_DATANODE_DATA_DIR)
 	make reset_hdfs --no-print-directory
 
 
@@ -159,7 +159,7 @@ put_data: data
 
 ## HDFS: Remove input data in the HDFS
 remove_data:
-	hdfs dfs -rm -r -f $(HDFS_INPUT_PATH)* $(HDFS_WHITELIST_PATH)*
+	@hdfs dfs -rm -r -f $(HDFS_INPUT_PATH)* $(HDFS_WHITELIST_PATH)*
 
 
 replace_data:
@@ -191,6 +191,10 @@ log:
 	@git log --oneline --graph --all
 
 
+split_all: archive/GetAllSplitOfFile.java data/split
+	javac archive/GetAllSplitOfFile.java
+	java archive/GetAllSplitOfFile $(LINES_IN_ONE_SPLIT) $(SPLIT_DATA_PATH)
+
 run_psd_split_full: archive/RunPSDSplit.java data/split
 	javac archive/RunPSDSplit.java
 	java archive/RunPSDSplit $(LINES_IN_ONE_SPLIT)
@@ -198,5 +202,5 @@ run_psd_split_full: archive/RunPSDSplit.java data/split
 
 run_psd_split_direct: archive/RunPSDSplitDirect.java data/split
 	@javac archive/RunPSDSplitDirect.java
-	@java archive/RunPSDSplitDirect
+	@java archive/RunPSDSplitDirect $(RUN_PSD_SPLIT_START) $(RUN_PSD_SPLIT_END)
 	rm archive/RunPSDSplitDirect.class

@@ -16,19 +16,17 @@ public class GetAllSplitOfFile {
    * 
    * @throws IOException
    */
-  public static void main(String args[]) throws IOException {
-    if (args.length != 1)
+  public static void main(String[] args) throws IOException {
+    if (args.length != 2)
       throw new IllegalArgumentException(
-          "Exact 1 argument must be provided.");
+          "Exact 2 arguments must be provided.");
 
     // No. of lines to be split and saved in each output file.
     // 10 million lines ~ 1.2GB
     long numberOfLines = Long.parseLong(args[0]);
 
     // Reading file and getting no. of files to be generated
-    // String inputFilename = "data/NetFlow.nf";
-    // String inputFilename = "data/cicids2017_friday.nf";
-    String inputFilename = "/mnt/sda1/Download/PJ_Data/netflow.nf";
+    String inputFilename = args[1];
     String outputFilePrefix = "data/split/";
     String outputFileSuffix = ".nf";
     System.out.println("Split all: Input file: " + inputFilename);
@@ -84,6 +82,7 @@ public class GetAllSplitOfFile {
         br.close();
       }
     } finally {
+      System.out.println();
     }
   } // End of main
 }

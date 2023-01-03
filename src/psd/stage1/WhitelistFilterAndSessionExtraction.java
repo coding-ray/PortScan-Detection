@@ -25,7 +25,7 @@ public class WhitelistFilterAndSessionExtraction {
     public void map(LongWritable key, Text oneLine, Context context)
         throws IOException, InterruptedException {
       NFWritable nf = new NFWritable(oneLine.toString());
-      if (!nf.isInWhitelist())
+      if (!nf.isInLocal() && !nf.isInWhitelist())
         context.write(nf.getKey(), nf.getValue());
     }
   }

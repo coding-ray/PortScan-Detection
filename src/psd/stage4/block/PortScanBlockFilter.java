@@ -1,4 +1,4 @@
-package psd.stage4.vertical;
+package psd.stage4.block;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -17,10 +17,10 @@ import psd.com.IOPath;
 import psd.stage3.IPStatisticsList;
 import psd.stage3.SessionAccumulation;
 
-public class PortScanVerticalFilter {
+public class PortScanBlockFilter {
 
   private static class SessionAccumulationLoader extends
-      Mapper<LongWritable, Text, PortScanVerticalConnection, SessionAccumulation> {
+      Mapper<LongWritable, Text, PortScanBlockConnection, SessionAccumulation> {
 
     private static final Pattern TAB_PATTERN = Pattern.compile("\t");
 
@@ -46,24 +46,23 @@ public class PortScanVerticalFilter {
       String[] elements = TAB_PATTERN.split(oneLine.toString());
       if (!elements[3].equals(IPStatisticsList.NONE))
         context.write(
-            new PortScanVerticalConnection(elements[0], elements[2]),
+            new PortScanBlockConnection(elements[0], elements[2]),
             new SessionAccumulation(Arrays.copyOfRange(elements, 3, 10)));
     }
   } // End of mapper
 
   private static class LargeFlowFilter extends
-      Reducer<PortScanVerticalConnection, SessionAccumulation, PortScanVerticalConnection, SessionAccumulation> {
+      Reducer<PortScanBlockConnection, SessionAccumulation, PortScanBlockConnection, SessionAccumulation> {
 
     @Override
-    public void reduce(PortScanVerticalConnection key,
+    public void reduce(PortScanBlockConnection key,
         Iterable<SessionAccumulation> values, Context context)
         throws IOException, InterruptedException {
 
       SessionAccumulation result = new SessionAccumulation();
 
       for (SessionAccumulation input : values) {
-        if (result.canAdd(input))
-          result = SessionAccumulation.add(result, input);
+        result = SessionAccumulation.add(result, input);
       }
 
       if (!result.hasNormalFlow())
@@ -73,22 +72,22 @@ public class PortScanVerticalFilter {
 
   private static Job initJob()
       throws IOException {
-    final String jobName = "Stage 4-2. Port-Scan Vertical Filter";
+    final String jobName = "Stage 4-1. Port-Scan Block Filter";
     System.out.println(jobName);
 
     Configuration conf = new Configuration();
     Job job = Job.getInstance(conf, jobName);
-    job.setJarByClass(PortScanVerticalFilter.class);
+    job.setJarByClass(PortScanBlockFilter.class);
 
     job.setMapperClass(SessionAccumulationLoader.class);
     job.setCombinerClass(LargeFlowFilter.class);
     job.setReducerClass(LargeFlowFilter.class);
 
-    job.setOutputKeyClass(PortScanVerticalConnection.class);
+    job.setOutputKeyClass(PortScanBlockConnection.class);
     job.setOutputValueClass(SessionAccumulation.class);
 
     FileInputFormat.addInputPath(job, new Path(IOPath.INPUT_4));
-    FileOutputFormat.setOutputPath(job, new Path(IOPath.OUTPUT_4_VERTICAL));
+    FileOutputFormat.setOutputPath(job, new Path(IOPath.OUTPUT_4_BLOCK));
 
     return job;
   }
@@ -97,6 +96,6 @@ public class PortScanVerticalFilter {
       throws IOException, ClassNotFoundException, InterruptedException {
 
     Job job = initJob();
-    return job.waitForCompletion(true) ? 0 : 42;
+    return job.waitForCompletion(true) ? 0 : 41;
   }
 }

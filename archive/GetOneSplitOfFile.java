@@ -32,7 +32,7 @@ public class GetOneSplitOfFile {
 
     int indexOfSplit = Integer.parseInt(args[1]);
     // Reading file and getting no. of files to be generated
-    String inputFilename = "/mnt/sda1/Download/PJ_Data/netflow.nf";
+    String inputFilename = "/mnt/WinData/Download/PJ_Data/netflow.nf";
     String outputFilePrefix = "data/split/";
     String outputFileSuffix = ".nf";
 

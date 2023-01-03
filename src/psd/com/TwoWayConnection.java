@@ -105,6 +105,12 @@ public class TwoWayConnection implements WritableComparable<TwoWayConnection> {
     whitelist = NFWhitelistInitializer.getWhitelist();
   }
 
+  public boolean isInLocal() {
+    // 0xC0A80000 = 192.168.0.0
+    return ((srcIP.get() & 0xFFFF0000L) == 0xC0A80000L) &&
+        ((dstIP.get() & 0xFFFF0000L) == 0xC0A80000L);
+  }
+
   public boolean isInWhitelist() {
     for (long ip : whitelist) {
       if (ip == srcIP.get() || ip == dstIP.get())

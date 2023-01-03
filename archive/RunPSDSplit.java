@@ -83,7 +83,7 @@ public class RunPSDSplit {
       execCommand("hdfs dfs -put -f whitelist/* psd/whitelist/");
 
       execCommand("make all --no-print-directory");
-      execCommand("mv out/4/part-r-00000 data/output_archive/" + i + ".nf");
+      execCommand("mv out/6/part-r-00000 data/output_archive/" + i + ".nf");
     }
   } // end of main
 } // end of class 

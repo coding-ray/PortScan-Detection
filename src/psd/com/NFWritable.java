@@ -138,6 +138,10 @@ public class NFWritable {
     return value;
   }
 
+  public boolean isInLocal() {
+    return key.isInLocal();
+  }
+
   public boolean isInWhitelist() {
     return key.isInWhitelist();
   }

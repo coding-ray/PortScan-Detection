@@ -1,24 +1,28 @@
-package psd.stage5;
+package psd.stage6;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.WritableComparable;
 
-public class ReversedIntWritable
-    implements WritableComparable<ReversedIntWritable> {
-  private IntWritable value;
+public class ReversedLongWritable
+    implements WritableComparable<ReversedLongWritable> {
+  private LongWritable value;
 
-  public ReversedIntWritable() {
-    value = new IntWritable();
+  public ReversedLongWritable() {
+    value = new LongWritable();
   }
 
-  public ReversedIntWritable(int v) {
-    value = new IntWritable(v);
+  public ReversedLongWritable(int v) {
+    value = new LongWritable(v);
   }
 
-  public int getValue() {
+  public ReversedLongWritable(String s) {
+    value = new LongWritable(Long.parseLong(s));
+  }
+
+  public long getValue() {
     return value.get();
   }
 
@@ -33,22 +37,22 @@ public class ReversedIntWritable
   }
 
   @Override
-  public int compareTo(ReversedIntWritable other) {
+  public int compareTo(ReversedLongWritable other) {
     return other.value.compareTo(value);
   }
 
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof ReversedIntWritable))
+    if (!(other instanceof ReversedLongWritable))
       return false;
 
-    ReversedIntWritable o = (ReversedIntWritable) other;
+    ReversedLongWritable o = (ReversedLongWritable) other;
     return value.equals(o.value);
   }
 
   @Override
   public int hashCode() {
-    return -value.get();
+    return (int) -(value.get() >> 32);
   }
 
   @Override
